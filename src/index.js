@@ -1,44 +1,39 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const authRouter = require('./dashboard/config');
 require('dotenv').config();
-const model = require('./models')
-
 
 const PORT = process.env.DEVPORT || 5050;
 const dburi = process.env.DB;
 const app = express();
-app.use(express.json())
 
-mongoose.connect(dburi)
-.then(()=>{
-    console.log('connected to database successfully')
-}).catch(()=>{
-    console.log('can\'t connect')
-})
-
-app.get('/get', async(req, res)=>{
-    
-    const fetched = await model.find({});
-    res.json(fetched);
-})
-
-
-app.post('/add', async(req, res)=>{
-    
-   
-    const nUser = new model(req.body);
-    const saved = await nUser.save();
-
-
-    res.json(saved);
-
-})
-
-
-app.get('*', ()=>{
-    console.log('server has been hited')
+mongoose
+  .connect(dburi)
+  .then(() => {
+    console.log('connected to database successfully');
+  })
+  .catch(() => {
+    console.log("can't connect");
 });
 
-app.listen(PORT, ()=>{
-    console.log(`connected successfully ON-${PORT}`)
+// Middlewares
+app.use(express.json());
+authRouter(app);
+
+// app.use('/sata', authRouter)
+app.post('/hi', (req, res)=>{
+    console.log('hi')
+    res.send('hi server')
+})
+
+
+
+
+app.get('/add', (_req, res) => {
+  console.log('server has been hited');
+  res.send('Hi Server');
+});
+
+app.listen(PORT, () => {
+  console.log(`connected successfully ON-${PORT}`);
 });
