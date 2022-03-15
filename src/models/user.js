@@ -7,17 +7,28 @@ const User = mongoose.model(
   new mongoose.Schema(
     {
       role: {
-        type: String,
+        title:{type: String,
         enum: {
           values: Object.values(roles),
           message: 'Provide a correct role',
         },
-        default: 'R3Vlc3Q=',
+        default: roles.Customer,},
+        grants:[{
+          resName: String,
+          createAny: [String],
+          readAny: [String],
+          deleteAny: [String],
+          updateAny: [String],
+          createOwn: [String],
+          readOwn: [String],
+          deleteOwn: [String],
+          updateOwn: [String]
+        }]
       },
       name: { type: String },
       email: { type: String },
       phone: { type: String },
-      encryptedPassword: { type: String },
+      password: { type: String },
       thumbnail: { type: String },
       country: { type: String },
     },
