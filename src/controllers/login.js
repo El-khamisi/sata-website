@@ -1,123 +1,80 @@
 const User = require('../models/user');
 const Agency = require('../models/agency');
-const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
-const {TOKENWORD} = require('../../config');
+const {successfulRes, failedRes} = require('../utils/response');
 
 
-exports.regUser = async (req, res, next)=>{
-    let {name, email, phone, password, thumbnail, country} = req.body;
-    if(email && password)
-            password = bcrypt.hashSync(password, 10);
-    else 
-        res.status(400).json({
-            stauts: 400,
-            msg:'Email and password are REQUIRED'});
+exports.regUser = async (req, res, next) => {
+  
+ 
+  try {
+    const saved = new User(req.body);
+    await saved.save();
+    
+    const token =  saved.generateToken();
+    return successfulRes(res, 201, {saved, token});
+    
+  } catch (e) {
+    return failedRes(res, 500, e);
+  }
 
-    try{
-       let saved = new User({name, email, phone, password, thumbnail, country});
-       await saved.save();
-       
-       const token = jwt.sign({
-           id:saved._id, email:saved.email, 
-       }, TOKENWORD);
-       res.header('auth-token', token);
-        
-    }catch(e){
-        res.status(500).json({e: e.message})
+};
+
+exports.logUser = async (req, res, next) => {
+  let { email, password } = req.body;
+  if (!email || !password) {
+    return failedRes(res, 400, null, 'Email and password are REQUIRED');
+  }
+
+  try {
+    let logged = await User.findOne({ email }).exec();
+    const matched = bcrypt.compareSync(password, logged.password);
+    if (!matched || !logged){
+      return failedRes(res, 400, null, 'Email or Password is invalid');
+
     }
-    res.send();
-//    next();
-}
+    const token = logged.generateToken();
+    return  successfulRes(res, 201, {saved, token});
 
-exports.logUser = async(req, res, next)=>{
-    let {email, password} = req.body;
-    if(!email || !password){
-        res.status(400).json({
-            stauts: 400,
-            msg:'Email and password are REQUIRED'});
+  } catch (e) {
+    return failedRes(res, 500, e);
+
+  }
+};
+
+exports.regAgency = async (req, res) => {
+  try {
+    const saved = new Agency(req.body);
+    await saved.save();
+    
+    const token =  saved.generateToken();
+    return successfulRes(res, 201, {saved, token});
+    
+  } catch (e) {
+    return failedRes(res, 500, e);
+  }
+  
+};
+
+exports.logAgency = async (req, res) => {
+  let { email, password } = req.body;
+  if (!email || !password) {
+    return failedRes(res, 400, null, 'Email and password are REQUIRED');
+  }
+
+  try {
+    let logged = await Agency.findOne({ email }).exec();
+    const matched = bcrypt.compareSync(password, logged.password);
+    if (!matched || !logged){
+      return failedRes(res, 400, null, 'Email or Password is invalid');
+
     }
     
-    try{
-        let logged = await User.findOne({email}).exec();
-        const matched = bcrypt.compareSync(password, logged.password);
-        if(!matched || !logged) res(400).json({
-            stauts: 400,
-            msg: 'Email or Password is invalid'
-        })
-        
-        const token =jwt.sign({
-            id: logged._id, email: logged.email
-        }, TOKENWORD);
+    const token = logged.generateToken();
+    return  successfulRes(res, 201, {saved, token});
 
-       res.set('auth-token', token);
+  } catch (e) {
+    return failedRes(res, 500, e);
 
-    }catch(e){
-        res.status(500).json({e: e.message})
-    }
-    next();
-    
-}
-
-exports.regAgency = async(req, res)=>{
-
-    if(email && password)
-            password = bcrypt.hashSync(password, 10);
-    else 
-        res.status(400).json({
-            stauts: 400,
-            msg:'Email and password are REQUIRED'});
-
-    try{
-       const saved = new User({name, email, phone, password, thumbnail, country});
-       await saved.save();
-       const token = jwt.sign({name, email}, TOKENWORD);
-       res.stauts(201).cookie('logged', token, {
-           httpOnly:true, secure: true})
-           .json({
-               status: 200,
-               msg: 'OK',
-               data: {
-                name, email
-               }
-           });
-    }catch(e){
-        res.status(500).json({e: e.message})
-    }
-    
-}
-
-exports.logAgency = async(req, res)=>{
-    let {email, password} = req.body;
-    if(!email || !password){
-        res.status(400).json({
-            stauts: 400,
-            msg:'Email and password are REQUIRED'});
-    }
-    
-    try{
-        const logged = await User.findOne({email}).exec();
-        const matched = bcrypt.compareSync(password, logged.password);
-        if(!matched || !logged) res(400).json({
-            stauts: 400,
-            msg: 'Email or Password is invalid'
-        })
-        const token =jwt.sign({
-            email:logged.email, name: logged.name}, TOKENWORD);
-
-        res.stauts(201).cookie('logged', token, {
-            httpOnly:true, secure: true})
-            .json({
-                status: 200,
-                msg: 'OK',
-                data: {
-                    name: logged.name, email: logged.email
-                }
-            });
-
-    }catch(e){
-        res.status(500).json({e: e.message})
-    }
-}
-
-
+  }
+};

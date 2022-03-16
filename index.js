@@ -1,14 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cookieParser = require("cookie-parser");
-const cors = require('cors');
-const {DBURI, DEVPORT} = require('./config');
-const roles = require('./src/dashboard/roles');
-const routes = require('./src/routes')
+const {DBURI, DEVPORT} = require('./src/config/env');
+const router = require('./src/routes');
 
 
 
 const app = express();
+
 
 mongoose
   .connect(DBURI)
@@ -19,17 +17,8 @@ mongoose
     console.log("can't connect");
 });
 
-// Middlewares
-app.use(cors());
-app.use(express.json());
-app.use(cookieParser());
-app.use(routes);
-
-app.get('/hello', (req, res, next)=>{
-  res.set('host', 'nut');
-  next();
-}, (req, res)=>{res.json({req:req.headers, res: res.get('host')})})
-
+const seeder = require('./src/models/index');
+router(app);
 
 app.get('/add', async(_req, res) => {
   
@@ -43,8 +32,7 @@ app.get('/add', async(_req, res) => {
     res.json(pop.filter(date[0]._doc))
 
   });
-  
-  
+    
 
 });
 

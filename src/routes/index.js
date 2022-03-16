@@ -1,27 +1,27 @@
-const router = require('express').Router();
-const controller = require('../controllers/index');
-const {logUser, regUser} =require('../controllers/login');
-const {autht} = require('../middlewares/autht');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const { logUser, regUser } = require('../controllers/login');
+const { autht } = require('../middlewares/autht');
 
-//Ordinary customer
-router.post('/signup', regUser, autht);
-router.post('/login', logUser, autht);
+const {find} =require('../controllers')
+const dashboard = require('./dashboard');
+const hotel = require('./hotel');
 
-
-// //Admin Routes
-// router.get('/dashboard', controller);
-// router.post('/dashboard/add-admin', controller);
-// router.post('/dashboard/add-vice', controller);
-// router.post('/dashboard/add-agency', controller);
-// router.get('/dashboard/get-agencies', controller);
-// router.get('/dashboard/get-vices', controller);
+module.exports = (app) => {
+  // Middlewares
+  app.use(cors());
+  app.use(express.json());
+  app.use(cookieParser());
 
 
-// //Agency 
-// router.post('/asignup', controller.regAgency);
-// router.post('/alogin', controller.logAgency);
+//Admin Routes
+dashboard(app);
+hotel(app);
 
-// router.get('/home', );
-
-
-module.exports = router;
+// app.post('/find', find)
+//   //Ordinary customer
+//   app.post('/signup', regUser);
+//   app.post('/login', logUser);
+//   app.get('/auth',autht);
+};
