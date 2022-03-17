@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
         {
           resource: String,
           create: [String], update: [String],
-          delete: [String], read: [String]
+          delete: [String], read: {type:[String], default: ['*']}
         },
       ],
     },

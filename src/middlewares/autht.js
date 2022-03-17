@@ -11,7 +11,6 @@ exports.autht = (req, res, next) => {
     const verify = jwt.verify(token, TOKENKEY);
 
     res.locals.token = verify;
-    
     next();
   }catch(e){
     return failedRes(res, 404, e);

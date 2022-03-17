@@ -20,22 +20,6 @@ mongoose
 const seeder = require('./src/models/index');
 router(app);
 
-app.get('/add', async(_req, res) => {
-  
-  
-  const pop = permissions.can('admin').readAny('m');
-
-  User.find({}, function(err, data){
-    if(err) res.send('err')
-
-    const date = data.filter((x)=>x._doc)
-    res.json(pop.filter(date[0]._doc))
-
-  });
-    
-
-});
-
 app.listen(DEVPORT, () => {
   console.log(`connected successfully ON-${DEVPORT}`);
 });

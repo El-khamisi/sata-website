@@ -1,16 +1,15 @@
-const { getHotels } = require('../controllers/hotel');
+const { canCreate, canRead, canDelete, canUpdate} = require('../middlewares/authz');
 const { autht } = require('../middlewares/autht');
-const { getPermissions } = require('../middlewares/authz');
+const { hotel } = require('../config/resources');
+const {readHotel, createHotel, updateHotel, deleteHotel} = require('../controllers/hotel');
+
 
 module.exports =(app)=>{
     
-    app.get('/hotels', getHotels)
-    app.get('/hotelresults', getHotel);
-    app.get('/hotel/guestDetails');
     
-    app.get('/hotels/get', autht, getPermissions);
-    app.post('/hotels/add', autht, getPermissions);
-    app.delete('/hotels/delete', autht, getPermissions);
-    app.put('/hotels/edit', autht, getPermissions);
+    app.get('/hotels/get', autht, canRead(hotel), readHotel);
+    app.post('/hotels/add', autht, canCreate(hotel), createHotel);
+    app.put('/hotels/edit', autht, canUpdate(hotel), updateHotel);
+    app.delete('/hotels/delete', autht, canDelete(hotel), deleteHotel);
 
 }

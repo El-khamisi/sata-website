@@ -19,14 +19,114 @@ exports.isAdmin = async(req, res, next)=>{
 
 }
 
-exports.getPermissions = async(req, res, next)=>{
-    
-    try{
-        const grants = res.locals.token.role.grants;
+exports.canCreate = (resource)=>{
+    return (req, res, next)=>{
+        try{
+            let title = res.locals.token.role.title;
+            let grants = res.locals.token.role.grants;
 
-        res.locals.grants = grants;
-        next();
-    }catch(e){
-        return failedRes(res, 500, e);
+            if(title && title == Admin) {
+                res.locals.grants = ['*'];
+                return next();
+            }
+
+            grants = grants.find(e=>e.resource == resource);
+            if(grants && grants.create.length>0){
+                res.locals.grants = grants.create;
+                return next();
+            }else {
+                throw new Error('You are NOT authorized');
+            }
+        }catch(e){
+            if(e instanceof ReferenceError)
+                return failedRes(res, 505, e);
+            else
+                return failedRes(res, 401, e);
+        }
+    
+    }
+}
+ 
+exports.canRead = (resource)=>{
+    return (req, res, next)=>{
+        try{
+            let title = res.locals.token.role.title;
+            let grants = res.locals.token.role.grants;
+
+            if(title && title == Admin) {
+                res.locals.grants = ['*'];
+                return next();
+            }
+
+            grants = grants.find(e=>e.resource == resource);
+            if(grants && grants.read.length>0){
+                res.locals.grants = grants.read;
+                return next();
+            }else {
+                throw new Error('You are NOT authorized');
+            }
+        }catch(e){
+            if(e instanceof ReferenceError)
+                return failedRes(res, 505, e);
+            else
+                return failedRes(res, 401, e);
+        }
+    
+    }
+}
+
+exports.canUpdate = (resource)=>{
+    return (req, res, next)=>{
+        try{
+            let title = res.locals.token.role.title;
+            let grants = res.locals.token.role.grants;
+
+            if(title && title == Admin) {
+                res.locals.grants = ['*'];
+                return next();
+            }
+
+            grants = grants.find(e=>e.resource == resource);
+            if(grants && grants.update.length>0){
+                res.locals.grants = grants.update;
+                return next();
+            }else {
+                throw new Error('You are NOT authorized');
+            }
+        }catch(e){
+            if(e instanceof ReferenceError)
+                return failedRes(res, 505, e);
+            else
+                return failedRes(res, 401, e);
+        }
+    
+    }
+}
+
+exports.canDelete = (resource)=>{
+    return (req, res, next)=>{
+        try{
+            let title = res.locals.token.role.title;
+            let grants = res.locals.token.role.grants;
+
+            if(title && title == Admin) {
+                res.locals.grants = ['*'];
+                return next();
+            }
+
+            grants = grants.find(e=>e.resource == resource);
+            if(grants && grants.delete.length>0){
+                res.locals.grants = grants.delete;
+                return next();
+            }else {
+                throw new Error('You are NOT authorized');
+            }
+        }catch(e){
+            if(e instanceof ReferenceError)
+                return failedRes(res, 505, e);
+            else
+                return failedRes(res, 401, e);
+        }
+    
     }
 }

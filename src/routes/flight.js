@@ -1,15 +1,13 @@
+const { readFlight, deleteFlight, updateFlight, createFlight } = require('../controllers/flight');
 const {autht} = require('../middlewares/autht');
-const {getPermissions} = require('../middlewares/authz');
-
+const { canCreate, canRead, canDelete, canUpdate} = require('../middlewares/authz');
+const {flight} = require('../config/resources');
 
 module.exports =(app)=>{
 
-    app.get('/flights', );
-    app.get('flightresults');
-    app.get('/flight/guestDetails');
-
-    app.get('/flights/get', autht, getPermissions);
-    app.post('/flights/add', autht, getPermissions);
-    app.delete('/flights/delete', autht, getPermissions);
-    app.put('/flights/edit', auth, getPermissions);
+  
+    app.get('/flights/get', autht, canRead(flight), readFlight);
+    app.post('/flights/add', autht, canCreate(flight), createFlight);
+    app.put('/flights/edit', auth, canUpdate(flight), updateFlight);
+    app.delete('/flights/delete', autht, canDelete(flight), deleteFlight);
 }

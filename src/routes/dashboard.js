@@ -6,11 +6,11 @@ const User = require('../models/user');
 module.exports = (app)=>{
 
     //Admin Routes
-    app.get('/dashboard', autht)
+    // app.get('/dashboard', autht)
     app.post('/dashboard/add-admin',autht, isAdmin, addAdmin);
     app.post('/dashboard/add-vice', autht, isAdmin, addVice);
     app.post('/dashboard/add-agency', autht, isAdmin, addAgency);
-    app.post('/dashboard/add-agencyManger', auth, isAdmin, addAgencyManger);
+    app.post('/dashboard/add-agencyManger', autht, isAdmin, addAgencyManger);
     app.get('/dashboard/get-agencies', getAgencies);
     app.get('/dashboard/get-vices', getVices);
 }
