@@ -1,7 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const { autht } = require('../middlewares/autht');
+const { authN } = require('../middlewares/authN');
 
 const { find } = require('../controllers');
 const { logUser, regUser } = require('../controllers/login');
@@ -29,5 +29,5 @@ module.exports = (app) => {
   //   //Ordinary customer
   app.post('/signup', regUser);
   //   app.post('/login', logUser);
-  //   app.get('/auth',autht);
+  //   app.get('/auth',authN);
 };
