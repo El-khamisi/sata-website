@@ -1,10 +1,10 @@
 //import dependencies
 const router = require('express').Router();
 
-const { readFlight, deleteFlight, updateFlight, createFlight } = require('../controllers/flight');
-const { authN } = require('../middlewares/authN');
-const { canCreate, canRead, canDelete, canUpdate } = require('../middlewares/authZ');
-const { flight } = require('../config/resources');
+const { readFlight, deleteFlight, updateFlight, createFlight } = require('./flight.controller');
+const { authN } = require('../../middlewares/authN');
+const { canCreate, canRead, canDelete, canUpdate } = require('../../middlewares/authZ');
+const { flight } = require('../../config/resources');
 
 
 router.get('/get', authN, canRead(flight), readFlight);

@@ -1,7 +1,7 @@
-const User = require('../models/user');
-const Agency = require('../models/agency');
-const { Admin, Vice, Agency_Admin, Agency_Manager } = require('../config/roles');
-const { successfulRes, failedRes } = require('../utils/response');
+const User = require('../../models/user.model');
+const Agency = require('../agency/agency.model');
+const { Admin, Vice, Agency_Admin, Agency_Manager } = require('../../config/roles');
+const { successfulRes, failedRes } = require('../../utils/response');
 
 exports.addAdmin = async (req, res) => {
   try {

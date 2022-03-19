@@ -1,4 +1,4 @@
-const Hotel = require('../models/hotel');
+const Flight = require('./flight.model');
 const { successfulRes, failedRes } = require('../utils/response');
 
 const getAllowed = (resgrants, body) => {
@@ -13,13 +13,13 @@ const getAllowed = (resgrants, body) => {
   return data;
 };
 
-exports.readHotel = async (req, res) => {
+exports.readFlight = async (req, res) => {
   try {
     const read = req.body.read;
     const q = req.body.q == undefined ? {} : req.body.q;
 
     const allowed = getAllowed(res.locals.grants, read);
-    let response = await Hotel.find(q).select(allowed).exec();
+    let response = await Flight.find(q).select(allowed).exec();
     return successfulRes(res, 200, response);
   } catch (e) {
     if (e instanceof ReferenceError) return failedRes(res, 505, e);
@@ -27,12 +27,12 @@ exports.readHotel = async (req, res) => {
   }
 };
 
-exports.createHotel = async (req, res) => {
+exports.createFlight = async (req, res) => {
   try {
     const add = req.body.add;
     const allowed = getAllowed(res.locals.grants, add);
 
-    const saved = new Hotel(allowed);
+    const saved = new Flight(allowed);
     await saved.save();
     return successfulRes(res, 200, saved);
   } catch (e) {
@@ -41,7 +41,7 @@ exports.createHotel = async (req, res) => {
   }
 };
 
-exports.updateHotel = async (req, res) => {
+exports.updateFlight = async (req, res) => {
   try {
     const old = req.body.old;
     const update = req.body.update;
@@ -55,7 +55,7 @@ exports.updateHotel = async (req, res) => {
   }
 };
 
-exports.deleteHotel = async (req, res) => {
+exports.deleteFlight = async (req, res) => {
   try {
     const remove = req.body.delete;
     const allowed = getAllowed(res.locals.grants, remove);

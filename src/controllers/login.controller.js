@@ -1,5 +1,5 @@
-const User = require('../models/user');
-const Agency = require('../models/agency');
+const User = require('../models/user.model');
+const Agency = require('../services/agency/agency.model');
 const bcrypt = require('bcrypt');
 const { successfulRes, failedRes } = require('../utils/response');
 

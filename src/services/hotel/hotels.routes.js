@@ -1,10 +1,10 @@
 //import dependencies
 const router = require('express').Router();
 
-const { canCreate, canRead, canDelete, canUpdate } = require('../middlewares/authZ');
-const { authN } = require('../middlewares/authN');
-const { hotel } = require('../config/resources');
-const { readHotel, createHotel, updateHotel, deleteHotel } = require('../controllers/hotel');
+const { canCreate, canRead, canDelete, canUpdate } = require('../../middlewares/authZ');
+const { authN } = require('../../middlewares/authN');
+const { hotel } = require('../../config/resources');
+const { readHotel, createHotel, updateHotel, deleteHotel } = require('./hotel.controller');
 
 
 router.get('/get', authN, canRead(hotel), readHotel);

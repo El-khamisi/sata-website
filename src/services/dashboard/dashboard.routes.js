@@ -1,10 +1,10 @@
 //import dependencies
 const router = require('express').Router();
 
-const { addAdmin, addAgency, addVice, getAgencies, getVices, addAgencyManger } = require('../controllers/adminLogin');
-const { authN } = require('../middlewares/authN');
-const { isAdmin } = require('../middlewares/authZ');
-const User = require('../models/user');
+const { addAdmin, addAgency, addVice, getAgencies, getVices, addAgencyManger } = require('./adminLogin.controller');
+const { authN } = require('../../middlewares/authN');
+const { isAdmin } = require('../../middlewares/authZ');
+const User = require('../../models/user.model');
 
 
 //Admin Routes

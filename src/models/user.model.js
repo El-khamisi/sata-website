@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
           create: [String],
           update: [String],
           delete: [String],
-          read: { type: [String], default: ['*'] },
+          read: [String],
         },
       ],
     },

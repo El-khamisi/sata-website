@@ -1,5 +1,5 @@
 const { Admin } = require('../config/roles');
-const User = require('./user');
+const User = require('./user.model');
 
 const seeder = async () => {
   const prototype = {
