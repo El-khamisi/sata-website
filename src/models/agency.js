@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const roles = require('../config/roles');
 
-
 const agencyShema = new mongoose.Schema(
   {
     nameOfAgency: { type: String },
@@ -33,43 +32,39 @@ const agencyShema = new mongoose.Schema(
       grants: [
         {
           resource: String,
-          create: [String], update: [String],
-          delete: [String], read: [String]
+          create: [String],
+          update: [String],
+          delete: [String],
+          read: [String],
         },
       ],
     },
   },
-  
+
   { strict: false }
-)
+);
 
+agencyShema.methods.generateToken = function () {
+  const token = jwt.sign(
+    {
+      id: this._id,
+      nameOfAgency: this.email,
+      role: this.role.title,
+    },
+    TOKENKEY
+  );
 
-agencyShema.methods.generateToken = function(){
-  const token = jwt.sign({
-    id: this._id,
-    nameOfAgency: this.email,
-    role: this.role.title
-  },
-  TOKENKEY);
-  
   return token;
-}
+};
 
-agencyShema.pre('save', function(next){
-  
+agencyShema.pre('save', function (next) {
   if (this.email && this.password) {
     this.password = bcrypt.hashSync(this.password, 10);
 
     next();
-  }else{
+  } else {
     throw new Error('Email and password are REQUIRED');
   }
+});
 
-})
-
-
-module.exports = mongoose.model(
-  'Agency',
-  agencyShema 
-);
-
+module.exports = mongoose.model('Agency', agencyShema);

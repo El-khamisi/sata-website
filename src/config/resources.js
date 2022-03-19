@@ -2,7 +2,7 @@ const resources = {
   user: 'user',
   agency: 'agency',
   hotel: 'hotel',
-  flight: 'flight'
+  flight: 'flight',
 };
 
 module.exports = resources;

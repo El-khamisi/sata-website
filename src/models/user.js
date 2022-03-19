@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { TOKENKEY } = require('../config/env');
 
-
 const userSchema = new mongoose.Schema(
   {
     name: { type: String },
@@ -14,8 +13,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String },
     thumbnail: { type: String },
     country: { type: String },
-    status: { type: String, enum: { values: Object.values(status), message: 'Provide a correct status' } ,
-    default: status.Active,},
+    status: { type: String, enum: { values: Object.values(status), message: 'Provide a correct status' }, default: status.Active },
 
     role: {
       title: {
@@ -29,44 +27,41 @@ const userSchema = new mongoose.Schema(
       grants: [
         {
           resource: String,
-          create: [String], update: [String],
-          delete: [String], read: {type:[String], default: ['*']}
+          create: [String],
+          update: [String],
+          delete: [String],
+          read: { type: [String], default: ['*'] },
         },
       ],
     },
-   
   },
   { strict: false }
 );
 
+userSchema.methods.generateToken = function () {
+  const token = jwt.sign(
+    {
+      id: this._id,
+      email: this.email,
+      role: this.role,
+    },
+    TOKENKEY
+  );
 
-userSchema.methods.generateToken = function(){
-  const token = jwt.sign({
-    id: this._id,
-    email: this.email,
-    role: this.role
-  },
-  TOKENKEY);
-  
   return token;
-}
+};
 
-
-userSchema.pre('save', function(next){
-  
+userSchema.pre('save', function (next) {
   if (this.email && this.password) {
     this.password = bcrypt.hashSync(this.password, 10);
 
     next();
-  }else{
+  } else {
     throw new Error('Email and password are REQUIRED');
   }
+});
 
-})
-
-
-userSchema.post(/^find/, function(doc, next){
-  
+userSchema.post(/^find/, function (doc, next) {
   // console.log(doc.length)
   // if(doc.length && doc.length>0)
   //   doc.forEach(e=> e.role = undefined)
@@ -74,11 +69,6 @@ userSchema.post(/^find/, function(doc, next){
   //   doc.role = undefined
 
   next();
-})
+});
 
-
-
-module.exports = mongoose.model(
-  'User',
-  userSchema
-);
+module.exports = mongoose.model('User', userSchema);
