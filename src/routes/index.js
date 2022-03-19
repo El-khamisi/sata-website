@@ -1,33 +1,43 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
+//import dependencies
+const morgan = require('morgan');
+
+
+// middlewares
 const { authN } = require('../middlewares/authN');
 
-const { find } = require('../controllers');
-const { logUser, regUser } = require('../controllers/login');
+// controllers
 const dashboard = require('./dashboard');
-const hotel = require('./hotel');
+const flights = require('./flights');
+const hotels = require('./hotels');
+
+const { logUser, regUser } = require('../controllers/login');
+
 const { home } = require('../controllers/home');
-const flight = require('./flight');
+
 
 module.exports = (app) => {
-  // Middlewares
-  app.use(cors());
-  app.use(express.json());
-  app.use(cookieParser());
 
-  //Home Routes
-  app.get('/', home);
 
-  //Admin Routes
-  dashboard(app);
 
-  flight(app);
-  // hotel(app);
+app.get('/', (req, res)=>{
+  
+  res.send('hi server')
+})
 
-  // app.post('/find', find)
-  //   //Ordinary customer
-  app.post('/signup', regUser);
+app.use(morgan('dev'))
+  
+  app.use('/dashboard', dashboard);
+  app.use('/flights', flights);
+  app.use('/hotels', hotels);
+
+  // //Home Routes
+  // app.get('/', home);
+
+  
   //   app.post('/login', logUser);
-  //   app.get('/auth',authN);
+  //   app.post('/signup',regUser);
+
+  
+
+
 };

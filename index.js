@@ -1,11 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const {DBURI, DEVPORT} = require('./src/config/env');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+
+
+
 const router = require('./src/routes');
 
+const {DBURI, DEVPORT} = require('./src/config/env');
+const seeder = require('./src/models/index');
 
-
-const app = express();
 
 
 mongoose
@@ -17,7 +23,16 @@ mongoose
     console.log("can't connect");
 });
 
-const seeder = require('./src/models/index');
+//Create Application
+const app = express()
+
+// Middlewares
+app.use(cors());
+app.use(express.json());
+app.use(cookieParser());
+
+
+//Routers
 router(app);
 
 app.listen(DEVPORT, () => {

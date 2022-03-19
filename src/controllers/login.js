@@ -28,7 +28,7 @@ exports.logUser = async (req, res, next) => {
       return failedRes(res, 400, null, 'Email or Password is invalid');
     }
     const token = logged.generateToken();
-    return successfulRes(res, 201, { saved, token });
+    return successfulRes(res, 201, { logged, token });
   } catch (e) {
     return failedRes(res, 500, e);
   }

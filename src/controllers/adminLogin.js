@@ -7,7 +7,7 @@ exports.addAdmin = async (req, res) => {
   try {
     const data = req.body;
     data.role.title = Admin;
-    const saved = new User();
+    const saved = new User(data);
     await saved.save();
 
     return successfulRes(res, 201, saved);
@@ -20,7 +20,7 @@ exports.addVice = async (req, res) => {
   try {
     const data = req.body;
     data.role.title = Vice;
-    const saved = new User();
+    const saved = new User(data);
     await saved.save();
 
     return successfulRes(res, 201, saved);
@@ -33,7 +33,7 @@ exports.addAgency = async (req, res) => {
   try {
     const data = req.body;
     data.role.title = Agency_Admin;
-    const saved = new Agency();
+    const saved = new Agency(data);
     await saved.save();
 
     return successfulRes(res, 201, saved);
@@ -46,7 +46,7 @@ exports.addAgencyManger = async (req, res) => {
   try {
     const data = req.body;
     data.role.title = Agency_Manager;
-    const saved = new Agency();
+    const saved = new Agency(data);
     await saved.save();
 
     return successfulRes(res, 201, saved);
