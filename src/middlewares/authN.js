@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const { TOKENKEY } = require('../config/env');
 const { failedRes } = require('../utils/response');
-const { Admin } = require('../config/roles');
+
 
 exports.authN = (req, res, next) => {
   try {
@@ -14,4 +13,5 @@ exports.authN = (req, res, next) => {
   } catch (e) {
     return failedRes(res, 404, e);
   }
+  
 };

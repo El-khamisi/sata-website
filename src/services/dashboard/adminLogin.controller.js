@@ -1,4 +1,4 @@
-const User = require('../../models/user.model');
+const User = require('../login/user.model');
 const Agency = require('../agency/agency.model');
 const { Admin, Vice, Agency_Admin, Agency_Manager } = require('../../config/roles');
 const { successfulRes, failedRes } = require('../../utils/response');

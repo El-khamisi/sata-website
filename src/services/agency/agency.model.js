@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const roles = require('../config/roles');
+const roles = require('../../config/roles');
 
 const agencyShema = new mongoose.Schema(
   {

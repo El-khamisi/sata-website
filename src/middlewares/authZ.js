@@ -1,4 +1,4 @@
-const User = require('../models/user.model');
+const User = require('../services/login/user.model');
 const { Admin } = require('../config/roles');
 const { failedRes } = require('../utils/response');
 

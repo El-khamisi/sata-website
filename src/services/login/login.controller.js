@@ -1,7 +1,7 @@
-const User = require('../models/user.model');
-const Agency = require('../services/agency/agency.model');
+const User = require('./user.model');
+const Agency = require('../agency/agency.model');
 const bcrypt = require('bcrypt');
-const { successfulRes, failedRes } = require('../utils/response');
+const { successfulRes, failedRes } = require('../../utils/response');
 
 exports.regUser = async (req, res, next) => {
   try {

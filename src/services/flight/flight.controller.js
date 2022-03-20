@@ -1,5 +1,5 @@
 const Flight = require('./flight.model');
-const { successfulRes, failedRes } = require('../utils/response');
+const { successfulRes, failedRes } = require('../../utils/response');
 
 const getAllowed = (resgrants, body) => {
   const data = {};

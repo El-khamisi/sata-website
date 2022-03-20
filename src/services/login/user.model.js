@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const roles = require('../config/roles');
-const status = require('../config/userStatus');
+const roles = require('../../config/roles');
+const status = require('../../config/userStatus');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { TOKENKEY } = require('../config/env');
+const { TOKENKEY } = require('../../config/env');
 
 const userSchema = new mongoose.Schema(
   {

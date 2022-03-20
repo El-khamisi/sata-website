@@ -4,7 +4,7 @@ const router = require('express').Router();
 const { addAdmin, addAgency, addVice, getAgencies, getVices, addAgencyManger } = require('./adminLogin.controller');
 const { authN } = require('../../middlewares/authN');
 const { isAdmin } = require('../../middlewares/authZ');
-const User = require('../../models/user.model');
+const User = require('../login/user.model');
 
 
 //Admin Routes
