@@ -7,10 +7,10 @@ const { TOKENKEY } = require('../../config/env');
 
 const userSchema = new mongoose.Schema(
   {
-    name: { type: String },
-    email: { type: String },
+    name: { type: String, trim: true },
+    email: { type: String, trim: true, required: [true, 'Email is required'], unique: true, lowercase: true },
     phone: { type: String },
-    password: { type: String },
+    password: { type: String, required: [true, 'Password is required'] },
     thumbnail: { type: String },
     country: { type: String },
     status: { type: String, enum: { values: Object.values(status), message: 'Provide a correct status' }, default: status.Active },
@@ -27,10 +27,10 @@ const userSchema = new mongoose.Schema(
       grants: [
         {
           resource: String,
-          create: [String],
-          update: [String],
-          delete: [String],
-          read: [String],
+          create: { type: Boolean, default: false },
+          update: { type: Boolean, default: false },
+          delete: { type: Boolean, default: false },
+          read: { type: Boolean, default: false },
         },
       ],
     },
@@ -61,13 +61,18 @@ userSchema.pre('save', function (next) {
   }
 });
 
-userSchema.post(/^find/, function (doc, next) {
-  // console.log(doc.length)
-  // if(doc.length && doc.length>0)
-  //   doc.forEach(e=> e.role = undefined)
-  // else
-  //   doc.role = undefined
 
+userSchema.post(['save', 'find', 'findByIdAndUpdate', 'findByIdAndDelete', '!findOne'], function (doc, next) {
+  
+  if (!doc) {
+    next();
+  } else if (doc.length && doc.length > 0) {
+    doc.forEach((e, i) => {
+      doc[i].password = undefined;
+    });
+  } else {
+    doc.password = undefined;
+  }
   next();
 });
 

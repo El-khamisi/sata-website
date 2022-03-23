@@ -6,10 +6,10 @@ const successfulRes = (res, code, data, status = 'success') => {
   });
 };
 
-const failedRes = (res, code, error = null, stauts = 'error') => {
+const failedRes = (res, code, error = null, status = 'error') => {
   return res.status(code).json({
     code: code,
-    stauts: stauts,
+    status: status,
     msg: error?.message,
   });
 };

@@ -3,8 +3,9 @@ const Agency = require('../agency/agency.model');
 const bcrypt = require('bcrypt');
 const { successfulRes, failedRes } = require('../../utils/response');
 
-exports.regUser = async (req, res, next) => {
+exports.regUser = async (req, res) => {
   try {
+    req.body.role.title = undefined;
     const saved = new User(req.body);
     await saved.save();
 
@@ -15,7 +16,7 @@ exports.regUser = async (req, res, next) => {
   }
 };
 
-exports.logUser = async (req, res, next) => {
+exports.logUser = async (req, res) => {
   let { email, password } = req.body;
   if (!email || !password) {
     return failedRes(res, 400, null, 'Email and password are REQUIRED');
@@ -23,12 +24,16 @@ exports.logUser = async (req, res, next) => {
 
   try {
     let logged = await User.findOne({ email }).exec();
+    if(!logged){
+      return failedRes(res, 400, null, 'Email is invalid');
+    }
+
     const matched = bcrypt.compareSync(password, logged.password);
-    if (!matched || !logged) {
+    if (!logged || !matched) {
       return failedRes(res, 400, null, 'Email or Password is invalid');
     }
     const token = logged.generateToken();
-    return successfulRes(res, 201, { logged, token });
+    return successfulRes(res, 201, { user: logged, token });
   } catch (e) {
     return failedRes(res, 500, e);
   }

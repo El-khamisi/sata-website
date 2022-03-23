@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { filterByGDS } = require('../../utils/serviceStatics');
 
-const hotelSchema = new mongoose.Schema(
+const tourpackageSchema = new mongoose.Schema(
   {
     name: String,
     GDSproviders: {
@@ -12,9 +12,9 @@ const hotelSchema = new mongoose.Schema(
   { strict: false }
 );
 
-hotelSchema.statics.filterByGDS = async function (gdsName) {
+tourpackageSchema.statics.filterByGDS = async function (gdsName) {
   let response = await filterByGDS(this, gdsName);
 
   return response;
 };
-module.exports = mongoose.model('Hotel', hotelSchema);
+module.exports = mongoose.model('Tourpackage', tourpackageSchema);

@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 
 
 //Config
-const {DBURI, DEVPORT} = require('./src/config/env');
+const {DBURI, DBURI_remote, DEVPORT} = require('./src/config/env');
 
 
-const seeder = require('./src/models/index.model')
+const seeder = require('./src/models/seeder.model')
 
 
 

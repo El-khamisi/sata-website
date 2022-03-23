@@ -1,15 +1,22 @@
 const mongoose = require('mongoose');
+const { filterByGDS } = require('../../utils/serviceStatics');
 
 const flightSchema = new mongoose.Schema(
   {
-    name: { type: String },
-    airlines: { type: [String] },
-    departing: { type: String },
-    arriving: { type: String },
-    tripDuration: { type: String },
-    flightAmenities: { type: Map, of: String },
+    name: String,
+    GDSproviders: [
+      {
+        name: String,
+        URL: String,
+      },
+    ],
   },
   { strict: false }
 );
 
+flightSchema.statics.filterByGDS = async function (gdsName) {
+  let response = await filterByGDS(this, gdsName);
+
+  return response;
+};
 module.exports = mongoose.model('Flight', flightSchema);

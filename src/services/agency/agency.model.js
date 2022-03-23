@@ -3,9 +3,9 @@ const roles = require('../../config/roles');
 
 const agencyShema = new mongoose.Schema(
   {
-    nameOfAgency: { type: String },
-    nameOfAdmin: { type: String },
-    email: { type: String },
+    nameOfAgency: { type: String, required: [true, 'Name of Agency is required'] },
+    nameOfAdmin: { type: String, trim: true, required: [true, 'Name of Agency Admin is required'] },
+    email: { type: String, trim: true, required: [true, 'Email is required'], unique: true, lowercase: true },
     password: { type: String },
     thumbnail: { type: String },
     addresses: { type: [String] },
@@ -27,15 +27,15 @@ const agencyShema = new mongoose.Schema(
           values: Object.values(roles),
           message: 'Provide a correct role',
         },
-        default: roles.Guest,
+        default: roles.Agency_Manager,
       },
       grants: [
         {
           resource: String,
-          create: [String],
-          update: [String],
-          delete: [String],
-          read: [String],
+          create: { type: Boolean, default: false },
+          update: { type: Boolean, default: false },
+          delete: { type: Boolean, default: false },
+          read: { type: Boolean, default: false },
         },
       ],
     },
@@ -48,8 +48,8 @@ agencyShema.methods.generateToken = function () {
   const token = jwt.sign(
     {
       id: this._id,
-      nameOfAgency: this.email,
-      role: this.role.title,
+      email: this.email,
+      role: this.role,
     },
     TOKENKEY
   );
@@ -65,6 +65,20 @@ agencyShema.pre('save', function (next) {
   } else {
     throw new Error('Email and password are REQUIRED');
   }
+});
+
+agencyShema.post(['save', 'find', 'findByIdAndUpdate', 'findByIdAndDelete', '!findOne'], function (doc, next) {
+  
+  if (!doc) {
+    next();
+  } else if (doc.length && doc.length > 0) {
+    doc.forEach((e, i) => {
+      doc[i].password = undefined;
+    });
+  } else {
+    doc.password = undefined;
+  }
+  next();
 });
 
 module.exports = mongoose.model('Agency', agencyShema);

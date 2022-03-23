@@ -2,14 +2,20 @@ const User = require('../services/login/user.model');
 const { Admin } = require('../config/roles');
 const { failedRes } = require('../utils/response');
 
+const gitContent = (res) => {
+  let title = res.locals.user.role.title;
+  let grants = res.locals.user.role.grants;
+  return { title, grants };
+};
+
 exports.isAdmin = async (req, res, next) => {
   try {
-    const id = res.locals.token.id;
-    const role = res.locals.token.role.title;
+    const id = res.locals.user.id;
+    const role = res.locals.user.role.title;
     if (role && role == Admin) {
       next();
     } else {
-      throw new Error('You are NOT authorized');
+      return failedRes(res, 401, null, 'You are NOT An Admin');
     }
   } catch (e) {
     return failedRes(res, 500, e);
@@ -19,20 +25,19 @@ exports.isAdmin = async (req, res, next) => {
 exports.canCreate = (resource) => {
   return (req, res, next) => {
     try {
-      let title = res.locals.token.role.title;
-      let grants = res.locals.token.role.grants;
+      let { title, grants } = gitContent(res);
 
       if (title && title == Admin) {
-        res.locals.grants = ['*'];
+        res.locals.grants = true;
         return next();
       }
 
       grants = grants.find((e) => e.resource == resource);
-      if (grants && grants.create.length > 0) {
+      if (grants.create) {
         res.locals.grants = grants.create;
         return next();
       } else {
-        throw new Error('You are NOT authorized');
+        throw new Error('You are NOT authorized to CREATE');
       }
     } catch (e) {
       if (e instanceof ReferenceError) return failedRes(res, 505, e);
@@ -44,20 +49,19 @@ exports.canCreate = (resource) => {
 exports.canRead = (resource) => {
   return (req, res, next) => {
     try {
-      let title = res.locals.token.role.title;
-      let grants = res.locals.token.role.grants;
+      let { title, grants } = gitContent(res);
 
       if (title && title == Admin) {
-        res.locals.grants = ['*'];
+        res.locals.grants = true;
         return next();
       }
 
       grants = grants.find((e) => e.resource == resource);
-      if (grants && grants.read.length > 0) {
+      if (grants.read) {
         res.locals.grants = grants.read;
         return next();
       } else {
-        throw new Error('You are NOT authorized');
+        throw new Error('You are NOT authorized to READ');
       }
     } catch (e) {
       if (e instanceof ReferenceError) return failedRes(res, 505, e);
@@ -69,20 +73,19 @@ exports.canRead = (resource) => {
 exports.canUpdate = (resource) => {
   return (req, res, next) => {
     try {
-      let title = res.locals.token.role.title;
-      let grants = res.locals.token.role.grants;
+      let { title, grants } = gitContent(res);
 
       if (title && title == Admin) {
-        res.locals.grants = ['*'];
+        res.locals.grants = true;
         return next();
       }
 
       grants = grants.find((e) => e.resource == resource);
-      if (grants && grants.update.length > 0) {
+      if (grants.update) {
         res.locals.grants = grants.update;
         return next();
       } else {
-        throw new Error('You are NOT authorized');
+        throw new Error('You are NOT authorized to UPDATE');
       }
     } catch (e) {
       if (e instanceof ReferenceError) return failedRes(res, 505, e);
@@ -94,20 +97,19 @@ exports.canUpdate = (resource) => {
 exports.canDelete = (resource) => {
   return (req, res, next) => {
     try {
-      let title = res.locals.token.role.title;
-      let grants = res.locals.token.role.grants;
+      let { title, grants } = gitContent(res);
 
       if (title && title == Admin) {
-        res.locals.grants = ['*'];
+        res.locals.grants = true;
         return next();
       }
 
       grants = grants.find((e) => e.resource == resource);
-      if (grants && grants.delete.length > 0) {
+      if (grants.delete) {
         res.locals.grants = grants.delete;
         return next();
       } else {
-        throw new Error('You are NOT authorized');
+        throw new Error('You are NOT authorized to DELETE');
       }
     } catch (e) {
       if (e instanceof ReferenceError) return failedRes(res, 505, e);
