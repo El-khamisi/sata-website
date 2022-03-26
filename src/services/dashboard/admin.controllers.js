@@ -60,9 +60,9 @@ exports.deleteUser = async (req, res) => {
   try {
     const _id = req.params.id;
 
-    const data = await User.findByIdAndDelete(_id).exec();
+    const response = await User.findByIdAndDelete(_id).exec();
 
-    return successfulRes(res, 200, data);
+    return successfulRes(res, 200, response);
   } catch (e) {
     return failedRes(res, 500, e);
   }

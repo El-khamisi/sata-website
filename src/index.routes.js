@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
@@ -10,7 +11,11 @@ const morgan = require('morgan');
 // Routes
 const agency = require('./services/agency/agency.routes');
 const cars = require('./services/car/car.routes');
+
 const admin = require('./services/dashboard/admin.routes');
+const roles = require('./services/roles/roles.routes');
+const resources = require('./services/resources/resources.routes')
+
 const flights = require('./services/flight/flights.routes');
 const hotels = require('./services/hotel/hotels.routes');
 const insurances = require('./services/insurance/insurance.routes');
@@ -47,8 +52,11 @@ module.exports = (app) => {
 
   // app.use('/agency', agency);
   app.use('/cars', cars);
-  app.use('/dashboard/admin', admin);
+  app.use('/dashboard', admin);
+  app.use('/dashboard', roles);
   // app.use('/dashboard/vice', dashboard);
+
+  app.use('/resources', resources)
 
   app.use('/flights', flights);
   app.use('/hotels', hotels);
@@ -60,4 +68,3 @@ module.exports = (app) => {
   const log = require('./services/login/login.routes');
   app.use(log);
 };
-

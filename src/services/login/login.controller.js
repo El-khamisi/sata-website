@@ -5,7 +5,6 @@ const { successfulRes, failedRes } = require('../../utils/response');
 
 exports.regUser = async (req, res) => {
   try {
-    req.body.role.title = undefined;
     const saved = new User(req.body);
     await saved.save();
 
@@ -24,7 +23,7 @@ exports.logUser = async (req, res) => {
 
   try {
     let logged = await User.findOne({ email }).exec();
-    if(!logged){
+    if (!logged) {
       return failedRes(res, 400, null, 'Email is invalid');
     }
 

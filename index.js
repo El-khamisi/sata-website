@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const {DBURI, DBURI_remote, DEVPORT} = require('./src/config/env');
 
 
-const seeder = require('./src/models/seeder.model')
+// const seeder = require('./src/models/seeder.model')
 
 
 

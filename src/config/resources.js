@@ -28,4 +28,5 @@ const resources = {
   provider: 'provider',
 };
 
-module.exports = resources;
+
+module.exports = {resources}

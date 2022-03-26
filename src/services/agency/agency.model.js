@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const roles = require('../../config/roles');
 
 const agencyShema = new mongoose.Schema(
   {
@@ -20,15 +19,8 @@ const agencyShema = new mongoose.Schema(
       thumbnail: { type: String },
       expDate: { type: Date },
     },
+    title: { type: String },
     role: {
-      title: {
-        type: String,
-        enum: {
-          values: Object.values(roles),
-          message: 'Provide a correct role',
-        },
-        default: roles.Agency_Manager,
-      },
       grants: [
         {
           resource: String,
@@ -68,7 +60,6 @@ agencyShema.pre('save', function (next) {
 });
 
 agencyShema.post(['save', 'find', 'findByIdAndUpdate', 'findByIdAndDelete', '!findOne'], function (doc, next) {
-  
   if (!doc) {
     next();
   } else if (doc.length && doc.length > 0) {

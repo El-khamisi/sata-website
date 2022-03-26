@@ -1,44 +1,31 @@
-const User = require('../services/login/user.model');
+const mongoose = require('mongoose');
 const { Admin } = require('../config/roles');
 const { failedRes } = require('../utils/response');
 
-const gitContent = (res) => {
-  let title = res.locals.user.role.title;
-  let grants = res.locals.user.role.grants;
-  return { title, grants };
-};
-
-exports.isAdmin = async (req, res, next) => {
+exports.isAdmin = (req, res, next) => {
   try {
-    const id = res.locals.user.id;
-    const role = res.locals.user.role.title;
-    if (role && role == Admin) {
-      next();
-    } else {
-      return failedRes(res, 401, null, 'You are NOT An Admin');
-    }
-  } catch (e) {
-    return failedRes(res, 500, e);
+    const role = res.locals.user.role;
+
+    if (role && role == Admin) return next();
+    else throw new Error('You are NOT authorized to Admin Only Routes');
+  } catch (err) {
+    return failedRes(res, 401, e);
   }
 };
 
 exports.canCreate = (resource) => {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     try {
-      let { title, grants } = gitContent(res);
+      const role = res.locals.user.role;
+      if (role == Admin) return next();
+      const response = await mongoose.connection.model.Roles.findOne({ title: role }).exec();
 
-      if (title && title == Admin) {
-        res.locals.grants = true;
-        return next();
-      }
-
-      grants = grants.find((e) => e.resource == resource);
-      if (grants.create) {
-        res.locals.grants = grants.create;
-        return next();
-      } else {
-        throw new Error('You are NOT authorized to CREATE');
-      }
+      response.grants.forEach((e) => {
+        if (e.resource == resource) {
+          if (e.create) return next();
+          else throw new Error('You are NOT authorized to READ');
+        }
+      });
     } catch (e) {
       if (e instanceof ReferenceError) return failedRes(res, 505, e);
       else return failedRes(res, 401, e);
@@ -47,22 +34,18 @@ exports.canCreate = (resource) => {
 };
 
 exports.canRead = (resource) => {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     try {
-      let { title, grants } = gitContent(res);
+      const role = res.locals.user.role;
+      if (role == Admin) return next();
+      const response = await mongoose.connection.model.Roles.findOne({ title: role }).exec();
 
-      if (title && title == Admin) {
-        res.locals.grants = true;
-        return next();
-      }
-
-      grants = grants.find((e) => e.resource == resource);
-      if (grants.read) {
-        res.locals.grants = grants.read;
-        return next();
-      } else {
-        throw new Error('You are NOT authorized to READ');
-      }
+      response.grants.forEach((e) => {
+        if (e.resource == resource) {
+          if (e.read) return next();
+          else throw new Error('You are NOT authorized to READ');
+        }
+      });
     } catch (e) {
       if (e instanceof ReferenceError) return failedRes(res, 505, e);
       else return failedRes(res, 401, e);
@@ -71,22 +54,18 @@ exports.canRead = (resource) => {
 };
 
 exports.canUpdate = (resource) => {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     try {
-      let { title, grants } = gitContent(res);
+      const role = res.locals.user.role;
+      if (role == Admin) return next();
+      const response = await mongoose.connection.model.Roles.findOne({ title: role }).exec();
 
-      if (title && title == Admin) {
-        res.locals.grants = true;
-        return next();
-      }
-
-      grants = grants.find((e) => e.resource == resource);
-      if (grants.update) {
-        res.locals.grants = grants.update;
-        return next();
-      } else {
-        throw new Error('You are NOT authorized to UPDATE');
-      }
+      response.grants.forEach((e) => {
+        if (e.resource == resource) {
+          if (e.update) return next();
+          else throw new Error('You are NOT authorized to READ');
+        }
+      });
     } catch (e) {
       if (e instanceof ReferenceError) return failedRes(res, 505, e);
       else return failedRes(res, 401, e);
@@ -95,22 +74,18 @@ exports.canUpdate = (resource) => {
 };
 
 exports.canDelete = (resource) => {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     try {
-      let { title, grants } = gitContent(res);
+      const role = res.locals.user.role;
+      if (role == Admin) return next();
+      const response = await mongoose.connection.model.Roles.findOne({ title: role }).exec();
 
-      if (title && title == Admin) {
-        res.locals.grants = true;
-        return next();
-      }
-
-      grants = grants.find((e) => e.resource == resource);
-      if (grants.delete) {
-        res.locals.grants = grants.delete;
-        return next();
-      } else {
-        throw new Error('You are NOT authorized to DELETE');
-      }
+      response.grants.forEach((e) => {
+        if (e.resource == resource) {
+          if (e.delete) return next();
+          else throw new Error('You are NOT authorized to READ');
+        }
+      });
     } catch (e) {
       if (e instanceof ReferenceError) return failedRes(res, 505, e);
       else return failedRes(res, 401, e);

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const roles = require('../../config/roles');
 const status = require('../../config/userStatus');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -15,25 +14,7 @@ const userSchema = new mongoose.Schema(
     country: { type: String },
     status: { type: String, enum: { values: Object.values(status), message: 'Provide a correct status' }, default: status.Active },
 
-    role: {
-      title: {
-        type: String,
-        enum: {
-          values: Object.values(roles),
-          message: 'Provide a correct role',
-        },
-        default: roles.Customer,
-      },
-      grants: [
-        {
-          resource: String,
-          create: { type: Boolean, default: false },
-          update: { type: Boolean, default: false },
-          delete: { type: Boolean, default: false },
-          read: { type: Boolean, default: false },
-        },
-      ],
-    },
+    role: { type: String },
   },
   { strict: false }
 );
@@ -51,7 +32,11 @@ userSchema.methods.generateToken = function () {
   return token;
 };
 
-userSchema.pre('save', function (next) {
+userSchema.pre('save', async function (next) {
+  //Roles validation
+  const response = await mongoose.connection.models.Roles.findOne({ title: this.role }).exec();
+  if (!response || response == null) throw new Error('Invalid role name');
+
   if (this.email && this.password) {
     this.password = bcrypt.hashSync(this.password, 10);
 
@@ -61,9 +46,7 @@ userSchema.pre('save', function (next) {
   }
 });
 
-
 userSchema.post(['save', 'find', 'findByIdAndUpdate', 'findByIdAndDelete', '!findOne'], function (doc, next) {
-  
   if (!doc) {
     next();
   } else if (doc.length && doc.length > 0) {
