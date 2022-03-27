@@ -12,7 +12,6 @@ exports.authN = (req, res, next) => {
     res.locals.user = verify;
     next();
   } catch (e) {
-    return failedRes(res, 404, e);
+    return failedRes(res, 401, e);
   }
 };
-16475;

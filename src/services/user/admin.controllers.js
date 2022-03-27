@@ -1,4 +1,4 @@
-const Agency = require('./agency.model');
+const User = require('./user.model');
 const { successfulRes, failedRes } = require('../../utils/response');
 
 exports.readUsers = async (req, res) => {
@@ -52,7 +52,7 @@ exports.editUser = async (req, res) => {
 
     return successfulRes(res, 200, response);
   } catch (e) {
-    return failedRes(res, 505, e);
+    return failedRes(res, 500, e);
   }
 };
 
@@ -60,9 +60,9 @@ exports.deleteUser = async (req, res) => {
   try {
     const _id = req.params.id;
 
-    const data = await User.findByIdAndDelete(_id).exec();
+    const response = await User.findByIdAndDelete(_id).exec();
 
-    return successfulRes(res, 200, data);
+    return successfulRes(res, 200, response);
   } catch (e) {
     return failedRes(res, 500, e);
   }

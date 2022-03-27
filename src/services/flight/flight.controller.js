@@ -25,7 +25,7 @@ exports.readFlight = async (req, res) => {
     let response = await Flight.find(q).select(allowed).exec();
     return successfulRes(res, 200, response);
   } catch (e) {
-    if (e instanceof ReferenceError) return failedRes(res, 505, e);
+    if (e instanceof ReferenceError) return failedRes(res, 500, e);
     else return failedRes(res, 401, e);
   }
 };
@@ -38,7 +38,7 @@ exports.createFlight = async (req, res) => {
     await saved.save();
     return successfulRes(res, 200, saved);
   } catch (e) {
-    if (e instanceof ReferenceError) return failedRes(res, 505, e);
+    if (e instanceof ReferenceError) return failedRes(res, 500, e);
     else return failedRes(res, 401, e);
   }
 };
@@ -52,7 +52,7 @@ exports.updateFlight = async (req, res) => {
     const response = await Flight.findOneAndUpdate(old, allowed, { new: true }).exec();
     return successfulRes(res, 200, response);
   } catch (e) {
-    if (e instanceof ReferenceError) return failedRes(res, 505, e);
+    if (e instanceof ReferenceError) return failedRes(res, 500, e);
     else return failedRes(res, 401, e);
   }
 };
@@ -64,7 +64,7 @@ exports.deleteFlight = async (req, res) => {
     const response = await Flight.findOneAndDelete(remove).exec();
     return successfulRes(res, 200, response);
   } catch (e) {
-    if (e instanceof ReferenceError) return failedRes(res, 505, e);
+    if (e instanceof ReferenceError) return failedRes(res, 500, e);
     else return failedRes(res, 401, e);
   }
 };

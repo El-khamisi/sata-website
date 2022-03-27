@@ -4,15 +4,11 @@ const { filterByGDS } = require('../../utils/serviceStatics');
 const flightSchema = new mongoose.Schema(
   {
     name: String,
-    GDSproviders: [
-      {
-        name: String,
-        URL: String,
-      },
-    ],
+    url: String
   },
   { strict: false }
 );
+
 
 flightSchema.statics.filterByGDS = async function (gdsName) {
   let response = await filterByGDS(this, gdsName);

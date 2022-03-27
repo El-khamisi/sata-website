@@ -1,4 +1,4 @@
-const User = require('./user.model');
+const User = require('../user/user.model');
 const Agency = require('../agency/agency.model');
 const bcrypt = require('bcrypt');
 const { successfulRes, failedRes } = require('../../utils/response');
@@ -6,10 +6,11 @@ const { successfulRes, failedRes } = require('../../utils/response');
 exports.regUser = async (req, res) => {
   try {
     const saved = new User(req.body);
+    saved.role = undefined
     await saved.save();
 
     const token = saved.generateToken();
-    return successfulRes(res, 201, { saved, token });
+    return successfulRes(res, 201, { user: saved, token });
   } catch (e) {
     return failedRes(res, 500, e);
   }
@@ -32,7 +33,7 @@ exports.logUser = async (req, res) => {
       return failedRes(res, 400, null, 'Email or Password is invalid');
     }
     const token = logged.generateToken();
-    return successfulRes(res, 201, { user: logged, token });
+    return successfulRes(res, 200, { user: logged, token });
   } catch (e) {
     return failedRes(res, 500, e);
   }
@@ -41,10 +42,11 @@ exports.logUser = async (req, res) => {
 exports.regAgency = async (req, res) => {
   try {
     const saved = new Agency(req.body);
+    saved.role = undefined
     await saved.save();
 
     const token = saved.generateToken();
-    return successfulRes(res, 201, { saved, token });
+    return successfulRes(res, 201, { user: saved, token });
   } catch (e) {
     return failedRes(res, 500, e);
   }
@@ -58,13 +60,17 @@ exports.logAgency = async (req, res) => {
 
   try {
     let logged = await Agency.findOne({ email }).exec();
+    if (!logged) {
+      return failedRes(res, 400, null, 'Email is invalid');
+    }
+
     const matched = bcrypt.compareSync(password, logged.password);
     if (!matched || !logged) {
       return failedRes(res, 400, null, 'Email or Password is invalid');
     }
 
     const token = logged.generateToken();
-    return successfulRes(res, 201, { saved, token });
+    return successfulRes(res, 200, { user: logged, token });
   } catch (e) {
     return failedRes(res, 500, e);
   }

@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const { TOKENKEY } = require('../../config/env');
 
 const agencyShema = new mongoose.Schema(
   {
@@ -20,17 +23,6 @@ const agencyShema = new mongoose.Schema(
       expDate: { type: Date },
     },
     title: { type: String },
-    role: {
-      grants: [
-        {
-          resource: String,
-          create: { type: Boolean, default: false },
-          update: { type: Boolean, default: false },
-          delete: { type: Boolean, default: false },
-          read: { type: Boolean, default: false },
-        },
-      ],
-    },
   },
 
   { strict: false }
@@ -49,9 +41,19 @@ agencyShema.methods.generateToken = function () {
   return token;
 };
 
-agencyShema.pre('save', function (next) {
+agencyShema.pre('save', async function (next) {
+  //Roles validation
+  if(this.role){
+    const response = await mongoose.connection.models.Roles.findOne({ title: this.role }).exec();
+    if (!response || response == null) throw new Error('Invalid role name');
+  }
+
   if (this.email && this.password) {
     this.password = bcrypt.hashSync(this.password, 10);
+
+  if(this.expDate){
+    
+  }
 
     next();
   } else {

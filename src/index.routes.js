@@ -9,17 +9,20 @@ const morgan = require('morgan');
 // const {TOKENKEY} = require('../src/config/env');
 
 // Routes
-const agency = require('./services/agency/agency.routes');
-const cars = require('./services/car/car.routes');
+const login = require('./services/login/login.routes');
 
 const admin = require('./services/dashboard/admin.routes');
 const roles = require('./services/roles/roles.routes');
-const resources = require('./services/resources/resources.routes')
+const geos = require('./services/geolocation/geolocation.routes');
 
+const publicResources = require('./services/resources/publicResources.routes');
+const publicRoles = require('./services/roles/publicRoles.routes');
+const publicGeos = require('./services/geolocation/publicGeolocation.routes');
+
+const cars = require('./services/car/car.routes');
 const flights = require('./services/flight/flights.routes');
 const hotels = require('./services/hotel/hotels.routes');
 const insurances = require('./services/insurance/insurance.routes');
-
 const seaTrips = require('./services/seaTrip/seatrip.routes');
 const tourPackages = require('./services/tourPackage/tourpackage.routes');
 
@@ -50,21 +53,20 @@ module.exports = (app) => {
   //Routers
   app.use(morgan('dev'));
 
-  // app.use('/agency', agency);
-  app.use('/cars', cars);
+  app.use(login);
+
   app.use('/dashboard', admin);
   app.use('/dashboard', roles);
-  // app.use('/dashboard/vice', dashboard);
+  app.use('/dashboard', geos);
 
-  app.use('/resources', resources)
+  app.use('/resources', publicResources);
+  app.use('/roles', publicRoles);
+  app.use('/geos', publicGeos);
 
+  app.use('/cars', cars);
   app.use('/flights', flights);
   app.use('/hotels', hotels);
   app.use('/insurances', insurances);
-
   app.use('/seatrips', seaTrips);
   app.use('/tourpackages', tourPackages);
-
-  const log = require('./services/login/login.routes');
-  app.use(log);
 };

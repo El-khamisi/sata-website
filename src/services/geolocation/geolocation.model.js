@@ -7,9 +7,9 @@ const geoSchema = new mongoose.Schema(
     code: { type: String, trim: true },
     key: { type: String, trim: true },
     language: { type: String, trim: true },
-    currency: [{ type: String, trim: true }],
+    currency: { type: String, trim: true },
   },
   { strict: false }
 );
 
-module.exports = mongoose.model('Geolocation', geoSchema);
+module.exports = mongoose.model('Geolocations', geoSchema);

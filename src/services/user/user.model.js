@@ -34,8 +34,10 @@ userSchema.methods.generateToken = function () {
 
 userSchema.pre('save', async function (next) {
   //Roles validation
-  const response = await mongoose.connection.models.Roles.findOne({ title: this.role }).exec();
-  if (!response || response == null) throw new Error('Invalid role name');
+  if(this.role){
+    const response = await mongoose.connection.models.Roles.findOne({ title: this.role }).exec();
+    if (!response || response == null) throw new Error('Invalid role name');
+  }
 
   if (this.email && this.password) {
     this.password = bcrypt.hashSync(this.password, 10);

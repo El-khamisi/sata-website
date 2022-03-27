@@ -1,17 +1,17 @@
-const User = require('../login/user.model');
+const Agency = require('./agency.model');
 const { successfulRes, failedRes } = require('../../utils/response');
 
-exports.readUsers = async (req, res) => {
+exports.readAgencys = async (req, res) => {
   try {
     let q = req.query;
     let response;
 
     if (q.name) {
-      response = await User.find({ name: q.name }).exec();
+      response = await Agency.find({ name: q.name }).exec();
     } else if (q.role) {
-      response = await User.find({ 'role.title': q.role });
+      response = await Agency.find({ 'role.title': q.role });
     } else {
-      response = await User.find({}).exec();
+      response = await Agency.find({}).exec();
     }
     return successfulRes(res, 200, response);
   } catch (e) {
@@ -19,11 +19,11 @@ exports.readUsers = async (req, res) => {
   }
 };
 
-exports.readUser = async (req, res) => {
+exports.readAgency = async (req, res) => {
   try {
     const _id = req.params.id;
 
-    const response = await User.findById(_id).exec();
+    const response = await Agency.findById(_id).exec();
 
     return successfulRes(res, 200, response);
   } catch (e) {
@@ -31,11 +31,11 @@ exports.readUser = async (req, res) => {
   }
 };
 
-exports.addUser = async (req, res) => {
+exports.addAgency = async (req, res) => {
   try {
     const data = req.body;
 
-    const saved = new User(data);
+    const saved = new Agency(data);
     await saved.save();
 
     return successfulRes(res, 201, saved);
@@ -44,11 +44,11 @@ exports.addUser = async (req, res) => {
   }
 };
 
-exports.editUser = async (req, res) => {
+exports.editAgency = async (req, res) => {
   try {
     const _id = req.params.id;
     const update = req.body;
-    const response = await User.findByIdAndUpdate(_id, update, { new: true });
+    const response = await Agency.findByIdAndUpdate(_id, update, { new: true });
 
     return successfulRes(res, 200, response);
   } catch (e) {
@@ -56,13 +56,13 @@ exports.editUser = async (req, res) => {
   }
 };
 
-exports.deleteUser = async (req, res) => {
+exports.deleteAgency = async (req, res) => {
   try {
     const _id = req.params.id;
 
-    const response = await User.findByIdAndDelete(_id).exec();
+    const data = await Agency.findByIdAndDelete(_id).exec();
 
-    return successfulRes(res, 200, response);
+    return successfulRes(res, 200, data);
   } catch (e) {
     return failedRes(res, 500, e);
   }

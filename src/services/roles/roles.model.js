@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {resources} = require('../../config/resources');
+const { resources } = require('../../config/resources');
 
 const roleSchema = mongoose.Schema({
   title: { type: String, unique: true },

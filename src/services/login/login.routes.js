@@ -1,12 +1,13 @@
-const { logUser, regUser } = require('./login.controller');
-
 const router = require('express').Router();
+
+const { logUser, regUser, regAgency, logAgency } = require('./login.controller');
+
 const seeder = require('../../config/defaultConfig');
-const { authN } = require('../../middlewares/authN');
-const { canRead } = require('../../middlewares/authZ');
 
-router.post('/signup', regUser);
-router.post('/login', logUser);
+router.post('/signup/user', regUser);
+router.post('/login/user', logUser);
 
+router.post('/signup/agency', regAgency);
+router.post('/login/agency', logAgency);
 
 module.exports = router;

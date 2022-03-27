@@ -5,11 +5,11 @@ const { failedRes } = require('../utils/response');
 exports.isAdmin = (req, res, next) => {
   try {
     const role = res.locals.user.role;
-
-    if (role && role == Admin) return next();
+    if (role == Admin) return next();
     else throw new Error('You are NOT authorized to Admin Only Routes');
-  } catch (err) {
-    return failedRes(res, 401, e);
+  } catch (e) {
+    if (e instanceof ReferenceError) return failedRes(res, 500, e);
+    else return failedRes(res, 401, e);
   }
 };
 
@@ -27,7 +27,7 @@ exports.canCreate = (resource) => {
         }
       });
     } catch (e) {
-      if (e instanceof ReferenceError) return failedRes(res, 505, e);
+      if (e instanceof ReferenceError) return failedRes(res, 500, e);
       else return failedRes(res, 401, e);
     }
   };
@@ -47,7 +47,7 @@ exports.canRead = (resource) => {
         }
       });
     } catch (e) {
-      if (e instanceof ReferenceError) return failedRes(res, 505, e);
+      if (e instanceof ReferenceError) return failedRes(res, 500, e);
       else return failedRes(res, 401, e);
     }
   };
@@ -67,7 +67,7 @@ exports.canUpdate = (resource) => {
         }
       });
     } catch (e) {
-      if (e instanceof ReferenceError) return failedRes(res, 505, e);
+      if (e instanceof ReferenceError) return failedRes(res, 500, e);
       else return failedRes(res, 401, e);
     }
   };
@@ -87,7 +87,7 @@ exports.canDelete = (resource) => {
         }
       });
     } catch (e) {
-      if (e instanceof ReferenceError) return failedRes(res, 505, e);
+      if (e instanceof ReferenceError) return failedRes(res, 500, e);
       else return failedRes(res, 401, e);
     }
   };

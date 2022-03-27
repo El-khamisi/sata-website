@@ -4,10 +4,7 @@ const { filterByGDS } = require('../../utils/serviceStatics');
 const tourpackageSchema = new mongoose.Schema(
   {
     name: String,
-    GDSproviders: {
-      type: Map,
-      of: String,
-    },
+    url: String
   },
   { strict: false }
 );

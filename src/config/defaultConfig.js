@@ -1,7 +1,5 @@
-const User = require('../services/login/user.model');
-const { resources } = require('./resources');
-const { rolesSeeder } = require('./roles');
-const config = {};
+const User = require('../services/user/user.model');
+const { rolesSeeder, Admin } = require('./roles');
 
 const superAdmin = async () => {
   const prototype = {
@@ -11,7 +9,7 @@ const superAdmin = async () => {
     password: 'admin123',
     thumbnail: 'thumbnail.com',
     country: 'egypt',
-    role: 'Admin',
+    role: Admin,
   };
   try {
     const saved = new User(prototype);
@@ -19,7 +17,7 @@ const superAdmin = async () => {
 
     const token = saved.generateToken();
   } catch (e) {
-    throw new Error('CAN NOT CREATE SUPER ADMIN'+ e);
+    throw new Error('CAN NOT CREATE SUPER ADMIN' + e);
   }
 };
 
@@ -34,6 +32,4 @@ const seeder = async () => {
 
 module.exports = {
   seeder,
-  ...config,
-  resources,
 };
