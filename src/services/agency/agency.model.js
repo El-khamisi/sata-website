@@ -22,7 +22,7 @@ const agencyShema = new mongoose.Schema(
       thumbnail: { type: String },
       expDate: { type: Date },
     },
-    title: { type: String },
+    role: { type: String },
   },
 
   { strict: false }
@@ -61,7 +61,8 @@ agencyShema.pre('save', async function (next) {
   }
 });
 
-agencyShema.post(['save', 'find', 'findByIdAndUpdate', 'findByIdAndDelete', '!findOne'], function (doc, next) {
+//Exclude findOne for Login password
+agencyShema.post(['save', 'find', 'findByIdAndUpdate', 'findByIdAndDelete'], function (doc, next) {
   if (!doc) {
     next();
   } else if (doc.length && doc.length > 0) {

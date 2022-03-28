@@ -1,3 +1,4 @@
+/*
 const resources = {
   user: 'user',
   agency: 'agency',
@@ -27,5 +28,16 @@ const resources = {
   service: 'service',
   provider: 'provider',
 };
+*/
 
+const resources={
+
+  hotel: 'hotel',
+  flight: 'flight',
+  car: 'car',
+  tourPackage: 'tourPackage',
+  seaTrip: 'seaTrip',
+  insurance: 'insurance',
+
+}
 module.exports = { resources };

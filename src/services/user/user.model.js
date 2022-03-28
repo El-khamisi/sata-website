@@ -48,7 +48,8 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-userSchema.post(['save', 'find', 'findByIdAndUpdate', 'findByIdAndDelete', '!findOne'], function (doc, next) {
+//Exclude findOne for Login password
+userSchema.post(['save', 'find', 'findByIdAndUpdate', 'findByIdAndDelete'], function (doc, next) {
   if (!doc) {
     next();
   } else if (doc.length && doc.length > 0) {

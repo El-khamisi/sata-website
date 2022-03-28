@@ -24,8 +24,11 @@ const app = express()
 const endpoints = require('./src/index.routes');
 endpoints(app);
 
-
-
-app.listen(DEVPORT, () => {
-  console.log(`connected successfully ON-${DEVPORT}`);
+app.listen(process.argv[2], () => {
+  console.log(`connected successfully ON PORT-${process.argv[2]}`);
 });
+
+
+// app.listen(DEVPORT, () => {
+//   console.log(`Production connected successfully ON PORT-${DEVPORT}`);
+// });
