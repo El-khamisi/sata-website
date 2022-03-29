@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+
+//configuration
 const { TOKENKEY } = require('../../config/env');
+const status = require('../../config/userStatus');
+const { Manager } = require('../../config/titles');
 
 const agencyShema = new mongoose.Schema(
   {
@@ -10,30 +14,34 @@ const agencyShema = new mongoose.Schema(
     email: { type: String, trim: true, required: [true, 'Email is required'], unique: true, lowercase: true },
     password: { type: String },
     thumbnail: { type: String },
-    addresses: { type: [String] },
+    addresses: { type: String },
     country: { type: String },
     CRN: {
-      number: { type: Number },
+      number: { type: String },
       thumbnail: { type: String },
       expDate: { type: Date },
     },
     taxCard: {
-      number: { type: Number },
+      number: { type: String },
       thumbnail: { type: String },
       expDate: { type: Date },
     },
-    role: { type: String },
+    status: { type: String, enum: { values: Object.values(status), message: 'Provide a correct status' }, default: status.Active },
+    title: { type: String, enum: { values: [Manager], message: 'Provide a correct Title name' }, default: Manager },
+    role: { type: mongoose.Schema.Types.ObjectId, ref: 'Roles'},
+    assistants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   },
-
   { strict: false }
 );
 
-agencyShema.methods.generateToken = function () {
+agencyShema.methods.generateToken = async function () {
+  const doc = await this.populate('role');
   const token = jwt.sign(
     {
-      id: this._id,
-      email: this.email,
-      role: this.role,
+      id: doc._id,
+      email: doc.email,
+      title: doc.title,
+      role: doc.role,
     },
     TOKENKEY
   );
@@ -43,17 +51,14 @@ agencyShema.methods.generateToken = function () {
 
 agencyShema.pre('save', async function (next) {
   //Roles validation
-  if(this.role){
-    const response = await mongoose.connection.models.Roles.findOne({ title: this.role }).exec();
+  if (this.role) {
+    const response = await mongoose.connection.models.Roles.findById(this.role).exec();
     if (!response || response == null) throw new Error('Invalid role name');
   }
 
   if (this.email && this.password) {
     this.password = bcrypt.hashSync(this.password, 10);
 
-  if(this.expDate){
-    
-  }
 
     next();
   } else {

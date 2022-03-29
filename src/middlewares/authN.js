@@ -4,8 +4,8 @@ const { failedRes } = require('../utils/response');
 
 exports.authN = (req, res, next) => {
   try {
-    if(!req.headers.authorization){
-      throw new Error('Login first')
+    if (!req.headers.authorization) {
+      throw new Error('Login first');
     }
 
     const token = req.headers.authorization.split(' ')[1];

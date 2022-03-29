@@ -1,12 +1,44 @@
-const mongoose = require('mongoose');
-const { Admin } = require('../config/roles');
+const { Admin, Vice, Manager, Assistant } = require('../config/titles');
 const { failedRes } = require('../utils/response');
 
 exports.isAdmin = (req, res, next) => {
   try {
-    const role = res.locals.user.role;
-    if (role == Admin) return next();
-    else throw new Error('You are NOT authorized to Admin Only Routes');
+    const title = res.locals.user.title;
+    if (title && title == Admin) return next();
+    else throw new Error('You are NOT authorized to Admins Only Routes');
+  } catch (e) {
+    if (e instanceof ReferenceError) return failedRes(res, 500, e);
+    else return failedRes(res, 401, e);
+  }
+};
+
+exports.isVice = (req, res, next) => {
+  try {
+    const title = res.locals.user.title;
+    if (title && title == Vice) return next();
+    else throw new Error('You are NOT authorized to Vices Routes');
+  } catch (e) {
+    if (e instanceof ReferenceError) return failedRes(res, 500, e);
+    else return failedRes(res, 401, e);
+  }
+};
+
+exports.isManager = (req, res, next) => {
+  try {
+    const title = res.locals.user.title;
+    if (title && title == Manager) return next();
+    else throw new Error('You are NOT authorized to Managers Routes');
+  } catch (e) {
+    if (e instanceof ReferenceError) return failedRes(res, 500, e);
+    else return failedRes(res, 401, e);
+  }
+};
+
+exports.isAssistant = (req, res, next) => {
+  try {
+    const title = res.locals.user.title;
+    if (title && title == Assistant) return next();
+    else throw new Error('You are NOT authorized to Assistant Routes');
   } catch (e) {
     if (e instanceof ReferenceError) return failedRes(res, 500, e);
     else return failedRes(res, 401, e);
@@ -16,11 +48,11 @@ exports.isAdmin = (req, res, next) => {
 exports.canCreate = (resource) => {
   return async (req, res, next) => {
     try {
+      const title = res.locals.user.title;
       const role = res.locals.user.role;
-      if (role == Admin) return next();
-      const response = await mongoose.connection.model.Roles.findOne({ title: role }).exec();
+      if (title && title == Admin) return next();
 
-      response.grants.forEach((e) => {
+      role.grants.forEach((e) => {
         if (e.resource == resource) {
           if (e.create) return next();
           else throw new Error('You are NOT authorized to READ');
@@ -36,11 +68,11 @@ exports.canCreate = (resource) => {
 exports.canRead = (resource) => {
   return async (req, res, next) => {
     try {
+      const title = res.locals.user.title;
       const role = res.locals.user.role;
-      if (role == Admin) return next();
-      const response = await mongoose.connection.model.Roles.findOne({ title: role }).exec();
+      if (title && title == Admin) return next();
 
-      response.grants.forEach((e) => {
+      role.grants.forEach((e) => {
         if (e.resource == resource) {
           if (e.read) return next();
           else throw new Error('You are NOT authorized to READ');
@@ -56,11 +88,11 @@ exports.canRead = (resource) => {
 exports.canUpdate = (resource) => {
   return async (req, res, next) => {
     try {
+      const title = res.locals.user.title;
       const role = res.locals.user.role;
-      if (role == Admin) return next();
-      const response = await mongoose.connection.model.Roles.findOne({ title: role }).exec();
+      if (title && title == Admin) return next();
 
-      response.grants.forEach((e) => {
+      role.grants.forEach((e) => {
         if (e.resource == resource) {
           if (e.update) return next();
           else throw new Error('You are NOT authorized to READ');
@@ -76,11 +108,11 @@ exports.canUpdate = (resource) => {
 exports.canDelete = (resource) => {
   return async (req, res, next) => {
     try {
+      const title = res.locals.user.title;
       const role = res.locals.user.role;
-      if (role == Admin) return next();
-      const response = await mongoose.connection.model.Roles.findOne({ title: role }).exec();
+      if (title && title == Admin) return next();
 
-      response.grants.forEach((e) => {
+      role.grants.forEach((e) => {
         if (e.resource == resource) {
           if (e.delete) return next();
           else throw new Error('You are NOT authorized to READ');

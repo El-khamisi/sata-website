@@ -1,10 +1,9 @@
 //import dependencies
 const router = require('express').Router();
-const Geolocations = require('./geolocation.model')
+const Geolocations = require('./geolocation.model');
 const { successfulRes, failedRes } = require('../../utils/response');
 
-
-const {readGeos} = require('./geolocation.controllers')
+const { readGeos } = require('./geolocation.controllers');
 
 //Geolocations
 router.get('/', async (req, res) => {
@@ -15,7 +14,5 @@ router.get('/', async (req, res) => {
     return failedRes(res, 500, e);
   }
 });
-
-
 
 module.exports = router;

@@ -2,6 +2,7 @@
 const resources = {
   user: 'user',
   agency: 'agency',
+  dashboard: 'dashboard',
 
   hotel: 'hotel',
   GDSHotel: 'GDSHotel',
@@ -30,14 +31,12 @@ const resources = {
 };
 */
 
-const resources={
-
+const resources = {
   hotel: 'hotel',
   flight: 'flight',
   car: 'car',
   tourPackage: 'tourPackage',
   seaTrip: 'seaTrip',
   insurance: 'insurance',
-
-}
+};
 module.exports = { resources };

@@ -9,7 +9,9 @@ exports.readUsers = async (req, res) => {
     if (q.name) {
       response = await User.find({ name: q.name }).exec();
     } else if (q.role) {
-      response = await User.find({ 'role.title': q.role });
+      response = await User.find({ role: q.role }).exec();
+    } else if (q.title) {
+      response = await User.find({ title: q.title }).exec();
     } else {
       response = await User.find({}).exec();
     }

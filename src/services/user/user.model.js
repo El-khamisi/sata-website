@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
-const status = require('../../config/userStatus');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+
+//configuration
 const { TOKENKEY } = require('../../config/env');
+const status = require('../../config/userStatus');
+const titles = require('../../config/titles');
 
 const userSchema = new mongoose.Schema(
   {
@@ -13,18 +16,20 @@ const userSchema = new mongoose.Schema(
     thumbnail: { type: String },
     country: { type: String },
     status: { type: String, enum: { values: Object.values(status), message: 'Provide a correct status' }, default: status.Active },
-
-    role: { type: String },
+    title: { type: String, enum: { values: Object.values(titles), message: 'Provide a correct Title name' }, default: titles.Customer },
+    role: { type: mongoose.Schema.Types.ObjectId, ref: 'Roles'},
   },
   { strict: false }
 );
 
-userSchema.methods.generateToken = function () {
+userSchema.methods.generateToken = async function () {
+  const doc = await this.populate('role');
   const token = jwt.sign(
     {
-      id: this._id,
-      email: this.email,
-      role: this.role,
+      id: doc._id,
+      email: doc.email,
+      title: doc.title,
+      role: doc.role,
     },
     TOKENKEY
   );
@@ -34,8 +39,8 @@ userSchema.methods.generateToken = function () {
 
 userSchema.pre('save', async function (next) {
   //Roles validation
-  if(this.role){
-    const response = await mongoose.connection.models.Roles.findOne({ title: this.role }).exec();
+  if (this.role) {
+    const response = await mongoose.connection.models.Roles.findById(this.role).exec();
     if (!response || response == null) throw new Error('Invalid role name');
   }
 

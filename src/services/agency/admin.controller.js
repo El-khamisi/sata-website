@@ -9,7 +9,9 @@ exports.readAgencys = async (req, res) => {
     if (q.name) {
       response = await Agency.find({ name: q.name }).exec();
     } else if (q.role) {
-      response = await Agency.find({ 'role.title': q.role });
+      response = await Agency.find({ role: q.role }).exec();
+    } else if (q.title) {
+      response = await Agency.find({ title: q.title }).exec();
     } else {
       response = await Agency.find({}).exec();
     }

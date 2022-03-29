@@ -4,11 +4,10 @@ const { filterByGDS } = require('../../utils/serviceStatics');
 const seatripSchema = new mongoose.Schema(
   {
     name: String,
-    url: String
+    url: String,
   },
   { strict: false }
 );
-
 
 seatripSchema.statics.filterByGDS = async function (gdsName) {
   let response = await filterByGDS(this, gdsName);

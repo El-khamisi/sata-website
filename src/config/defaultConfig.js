@@ -1,7 +1,8 @@
 const User = require('../services/user/user.model');
-const { rolesSeeder, Admin } = require('./roles');
+const { Admin } = require('./titles');
 
 const superAdmin = async () => {
+  await User.findOneAndDelete({email: 'admin@test.com'}).exec();
   const prototype = {
     name: 'Admin',
     email: 'admin@test.com',
@@ -9,7 +10,7 @@ const superAdmin = async () => {
     password: 'admin123',
     thumbnail: 'thumbnail.com',
     country: 'egypt',
-    role: Admin,
+    title: Admin,
   };
   try {
     const saved = new User(prototype);
@@ -23,7 +24,6 @@ const superAdmin = async () => {
 
 const seeder = async () => {
   try {
-    await rolesSeeder();
     await superAdmin();
   } catch (err) {
     console.log(err);

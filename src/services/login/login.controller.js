@@ -2,14 +2,15 @@ const User = require('../user/user.model');
 const Agency = require('../agency/agency.model');
 const bcrypt = require('bcrypt');
 const { successfulRes, failedRes } = require('../../utils/response');
+const { Customer } = require('../../config/titles');
 
 exports.regUser = async (req, res) => {
   try {
     const saved = new User(req.body);
-    saved.role = undefined
+    saved.role = Customer;
     await saved.save();
 
-    const token = saved.generateToken();
+    const token = await saved.generateToken();
     return successfulRes(res, 201, { user: saved, token });
   } catch (e) {
     return failedRes(res, 500, e);
@@ -32,7 +33,7 @@ exports.logUser = async (req, res) => {
     if (!logged || !matched) {
       return failedRes(res, 400, null, 'Email or Password is invalid');
     }
-    const token = logged.generateToken();
+    const token = await logged.generateToken();
     return successfulRes(res, 200, { user: logged, token });
   } catch (e) {
     return failedRes(res, 500, e);
@@ -42,10 +43,10 @@ exports.logUser = async (req, res) => {
 exports.regAgency = async (req, res) => {
   try {
     const saved = new Agency(req.body);
-    saved.role = undefined
+    saved.role = undefined;
     await saved.save();
 
-    const token = saved.generateToken();
+    const token = await saved.generateToken();
     return successfulRes(res, 201, { user: saved, token });
   } catch (e) {
     return failedRes(res, 500, e);
@@ -69,7 +70,7 @@ exports.logAgency = async (req, res) => {
       return failedRes(res, 400, null, 'Email or Password is invalid');
     }
 
-    const token = logged.generateToken();
+    const token = await logged.generateToken();
     return successfulRes(res, 200, { user: logged, token });
   } catch (e) {
     return failedRes(res, 500, e);

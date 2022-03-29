@@ -1,4 +1,4 @@
-const Roles = require('./roles.model');
+const {Roles} = require('./roles.model');
 const { successfulRes, failedRes } = require('../../utils/response');
 
 exports.readRoles = async (req, res) => {

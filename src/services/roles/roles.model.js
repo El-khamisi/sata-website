@@ -28,4 +28,7 @@ roleSchema.pre('save', function (next) {
   next();
 });
 
-module.exports = mongoose.model('Roles', roleSchema);
+module.exports = {
+  Roles: mongoose.model('Roles', roleSchema),
+  roleSchema
+}

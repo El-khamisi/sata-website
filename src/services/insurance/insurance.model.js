@@ -4,11 +4,10 @@ const { filterByGDS } = require('../../utils/serviceStatics');
 const insuranceSchema = new mongoose.Schema(
   {
     name: String,
-    url: String
+    url: String,
   },
   { strict: false }
 );
-
 
 insuranceSchema.statics.filterByGDS = async function (gdsName) {
   let response = await filterByGDS(this, gdsName);

@@ -6,16 +6,16 @@ const { successfulRes } = require('../../utils/response');
 
 //Resources
 router.get('/', (req, res) => {
-  const arr =  Object.keys(resources);
+  const arr = Object.keys(resources);
   let response = [];
-  for(const i of arr ){
+  for (const e of arr) {
     response.push({
-      resource: i,
+      resource: e,
       create: false,
       update: false,
       delete: false,
-      read: false
-    })
+      read: false,
+    });
   }
 
   return successfulRes(res, 200, response);

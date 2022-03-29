@@ -4,7 +4,7 @@ const { filterByGDS } = require('../../utils/serviceStatics');
 const carSchema = new mongoose.Schema(
   {
     name: String,
-    url: String
+    url: String,
   },
   { strict: false }
 );

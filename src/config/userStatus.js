@@ -3,4 +3,4 @@ const status = {
   Suspended: 'suspended-account',
 };
 
-module.exports = status;
+module.exports = { ...status };

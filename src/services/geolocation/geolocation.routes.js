@@ -8,7 +8,6 @@ const { isAdmin } = require('../../middlewares/authZ');
 // controllers
 const { readGeos, readGeo, addGeo, editGeo, deleteGeo } = require('./geolocation.controllers');
 
-
 //Admin Routes -- Geos --> /dashboard
 router.get('/geos', authN, isAdmin, readGeos);
 router.get('/geo/:id', authN, isAdmin, readGeo);
