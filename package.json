@@ -9,7 +9,7 @@
     "prettier": "prettier --config .prettierrc 'src/**/*.js' --write",
     "dev": "nodemon index.js 5050",
     "prod": "node index.js 8080",
-    "start": "node index.js 8080"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",

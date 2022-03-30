@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 module.exports = {
-  DEVPORT: process.env.DEVPORT,
+  PORT: process.env.PORT,
   DBURI: process.env.DBURI,
   DBURI_remote: process.env.DBURI_remote,
   TOKENKEY: process.env.TOKENWORD,

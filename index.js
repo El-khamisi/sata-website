@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 
 
 //Config
-const {DBURI, DBURI_remote, DEVPORT} = require('./src/config/env');
+const {DBURI, DBURI_remote, PORT} = require('./src/config/env');
 
+const port =   PORT|| 8080;
 
 // const seeder = require('./src/models/seeder.model')
 
@@ -25,8 +26,8 @@ const endpoints = require('./src/index.routes');
 endpoints(app);
 
 
-app.listen(process.argv[2], () => {
-  console.log(`connected successfully ON PORT-${process.argv[2]}`);
+app.listen(port, () => {
+  console.log(`connected successfully ON port-${port}`);
 });
 
 
