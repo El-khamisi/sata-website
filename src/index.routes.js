@@ -73,4 +73,7 @@ module.exports = (app) => {
   app.use('/insurances', insurances);
   app.use('/seatrips', seaTrips);
   app.use('/tourpackages', tourPackages);
+  app.use('/', (req, res)=>{
+    res.send('HI ... SATA')
+  })
 };
