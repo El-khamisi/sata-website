@@ -8,7 +8,8 @@
     "lint": "eslint . --ext .js",
     "prettier": "prettier --config .prettierrc 'src/**/*.js' --write",
     "dev": "nodemon index.js 5050",
-    "prod": "node index.js 8080"
+    "prod": "node index.js 8080",
+    "start": "node index.js 8080"
   },
   "keywords": [],
   "author": "",

@@ -10,7 +10,7 @@ const {DBURI, DBURI_remote, DEVPORT} = require('./src/config/env');
 
 
 
-mongoose.connect(DBURI)
+mongoose.connect(DBURI_remote)
   .then(() => {
     console.log('connected to database successfully');
   })
@@ -24,9 +24,6 @@ const app = express()
 const endpoints = require('./src/index.routes');
 endpoints(app);
 
-app.listen(DEVPORT, () => {
-  console.log(`connected successfully ON PORT-${DEVPORT}`);
-});
 
 app.listen(process.argv[2], () => {
   console.log(`connected successfully ON PORT-${process.argv[2]}`);

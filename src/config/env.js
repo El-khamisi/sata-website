@@ -3,6 +3,7 @@ require('dotenv').config();
 module.exports = {
   DEVPORT: process.env.DEVPORT,
   DBURI: process.env.DBURI,
+  DBURI_remote: process.env.DBURI_remote,
   TOKENKEY: process.env.TOKENWORD,
 
   cloudinary_name: process.env.cloudinary_name,
