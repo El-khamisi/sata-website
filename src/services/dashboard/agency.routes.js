@@ -6,8 +6,7 @@ const { authN } = require('../../middlewares/authN');
 const { isManager } = require('../../middlewares/authZ');
 
 // controllers
-const {readAssistants, readAssistant, addAssistant, editAssistant, deleteAssistant} = require('../agency/manager.controller');
-
+const { readAssistants, readAssistant, addAssistant, editAssistant, deleteAssistant } = require('../agency/manager.controller');
 
 //Managers Routes -- Assistants  --> /dashboard/agency
 router.get('/assistants', authN, isManager, readAssistants);

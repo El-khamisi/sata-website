@@ -20,4 +20,5 @@ router.put('/role/:id', editRole);
 // router.delete('/role/:id', authN, isAdmin, deleteRole);
 router.delete('/role/:id', deleteRole);
 
+
 module.exports = router;

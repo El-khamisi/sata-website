@@ -30,5 +30,5 @@ roleSchema.pre('save', function (next) {
 
 module.exports = {
   Roles: mongoose.model('Roles', roleSchema),
-  roleSchema
-}
+  roleSchema,
+};

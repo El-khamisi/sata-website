@@ -2,7 +2,7 @@ const User = require('../services/user/user.model');
 const { Admin } = require('./titles');
 
 const superAdmin = async () => {
-  await User.findOneAndDelete({email: 'admin@test.com'}).exec();
+  await User.findOneAndDelete({ email: 'admin@test.com' }).exec();
   const prototype = {
     name: 'Admin',
     email: 'admin@test.com',

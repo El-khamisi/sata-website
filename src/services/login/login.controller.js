@@ -11,7 +11,7 @@ exports.regUser = async (req, res) => {
     await saved.save();
 
     const token = await saved.generateToken();
-    return successfulRes(res, 201, { user: saved, token });
+    return successfulRes(res, 201, { token });
   } catch (e) {
     return failedRes(res, 500, e);
   }
@@ -34,7 +34,7 @@ exports.logUser = async (req, res) => {
       return failedRes(res, 400, null, 'Email or Password is invalid');
     }
     const token = await logged.generateToken();
-    return successfulRes(res, 200, { user: logged, token });
+    return successfulRes(res, 200, { token });
   } catch (e) {
     return failedRes(res, 500, e);
   }
@@ -47,7 +47,7 @@ exports.regAgency = async (req, res) => {
     await saved.save();
 
     const token = await saved.generateToken();
-    return successfulRes(res, 201, { user: saved, token });
+    return successfulRes(res, 201, { token });
   } catch (e) {
     return failedRes(res, 500, e);
   }
@@ -71,7 +71,7 @@ exports.logAgency = async (req, res) => {
     }
 
     const token = await logged.generateToken();
-    return successfulRes(res, 200, { user: logged, token });
+    return successfulRes(res, 200, { token });
   } catch (e) {
     return failedRes(res, 500, e);
   }

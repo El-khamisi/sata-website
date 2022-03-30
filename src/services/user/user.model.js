@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
     country: { type: String },
     status: { type: String, enum: { values: Object.values(status), message: 'Provide a correct status' }, default: status.Active },
     title: { type: String, enum: { values: Object.values(titles), message: 'Provide a correct Title name' }, default: titles.Customer },
-    role: { type: mongoose.Schema.Types.ObjectId, ref: 'Roles'},
+    role: { type: mongoose.Schema.Types.ObjectId, ref: 'Roles' },
   },
   { strict: false }
 );

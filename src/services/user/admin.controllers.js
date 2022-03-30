@@ -1,5 +1,6 @@
 const User = require('./user.model');
 const { successfulRes, failedRes } = require('../../utils/response');
+const { users_thumbs } = require('../../config/cloudinary');
 
 exports.readUsers = async (req, res) => {
   try {
@@ -36,8 +37,14 @@ exports.readUser = async (req, res) => {
 exports.addUser = async (req, res) => {
   try {
     const data = req.body;
-
+    const file = req.file;
     const saved = new User(data);
+    
+    
+    if (file && file.path) {
+      saved.thumbnail= await users_thumbs(file.path, saved._id);
+    }
+
     await saved.save();
 
     return successfulRes(res, 201, saved);
@@ -50,6 +57,13 @@ exports.editUser = async (req, res) => {
   try {
     const _id = req.params.id;
     const update = req.body;
+    const file = req.file;
+
+    
+    if (file && file.path) {
+      update.thumbnail = await users_thumbs(file.path, _id);
+    }
+    
     const response = await User.findByIdAndUpdate(_id, update, { new: true });
 
     return successfulRes(res, 200, response);
