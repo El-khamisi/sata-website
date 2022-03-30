@@ -1,7 +1,7 @@
 ////import dependencies
 const router = require('express').Router();
 
-const { titles } = require('../../config/titles');
+const titles  = require('../../config/titles');
 const { successfulRes } = require('../../utils/response');
 
 //Ttitles
