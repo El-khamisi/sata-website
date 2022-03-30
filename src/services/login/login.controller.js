@@ -11,6 +11,9 @@ exports.regUser = async (req, res) => {
     await saved.save();
 
     const token = await saved.generateToken();
+    res.cookie('authorization', token, {
+      maxAge: 900000
+    });
     return successfulRes(res, 201, { token });
   } catch (e) {
     return failedRes(res, 500, e);
@@ -34,6 +37,9 @@ exports.logUser = async (req, res) => {
       return failedRes(res, 400, null, 'Email or Password is invalid');
     }
     const token = await logged.generateToken();
+    res.cookie('authorization', token, {
+      maxAge: 900000
+    });
     return successfulRes(res, 200, { token });
   } catch (e) {
     return failedRes(res, 500, e);
@@ -47,6 +53,9 @@ exports.regAgency = async (req, res) => {
     await saved.save();
 
     const token = await saved.generateToken();
+    res.cookie('authorization', token, {
+      maxAge: 900000
+    });
     return successfulRes(res, 201, { token });
   } catch (e) {
     return failedRes(res, 500, e);
@@ -71,6 +80,9 @@ exports.logAgency = async (req, res) => {
     }
 
     const token = await logged.generateToken();
+    res.cookie('authorization', token, {
+      maxAge: 900000
+    });
     return successfulRes(res, 200, { token });
   } catch (e) {
     return failedRes(res, 500, e);

@@ -70,6 +70,7 @@ exports.canRead = (resource) => {
     try {
       const title = res.locals.user.title;
       const role = res.locals.user.role;
+      console.log(title)
       if (title && title == Admin) return next();
 
       role.grants.forEach((e) => {

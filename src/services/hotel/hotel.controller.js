@@ -19,7 +19,7 @@ exports.readHotel = async (req, res) => {
     const q = req.body.q == undefined ? {} : req.body.q;
 
     const allowed = getAllowed(res.locals.grants, read);
-    let response = await Hotel.find(q).select(allowed).exec();
+    let response = await Hotel.find(q).exec();
     return successfulRes(res, 200, response);
   } catch (e) {
     if (e instanceof ReferenceError) return failedRes(res, 505, e);

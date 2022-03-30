@@ -10,9 +10,7 @@ exports.authN = (req, res, next) => {
 
     const token = req.headers.authorization.split(' ')[1];
     const verify = jwt.verify(token, TOKENKEY);
-    res.cookie('authorization', verify, {
-      maxAge: 900000,
-    });
+
     res.locals.user = verify;
     next();
   } catch (e) {

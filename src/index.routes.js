@@ -57,10 +57,11 @@ module.exports = (app) => {
 
   app.use(login);
 
+
   app.use('/dashboard/admin', admin);
+  app.use('/dashboard/agency', agency);
   app.use('/dashboard', roles);
   app.use('/dashboard', geos);
-  app.use('/dashboard/agency', agency);
 
   app.use('/resources', publicResources);
   app.use('/roles', publicRoles);
@@ -73,8 +74,7 @@ module.exports = (app) => {
   app.use('/insurances', insurances);
   app.use('/seatrips', seaTrips);
   app.use('/tourpackages', tourPackages);
-  app.all('/', (req, res)=>{
-    res.send('HI ... SATA')
-  })
- 
+  app.all('/', (req, res) => {
+    res.send('HI ... SATA');
+  });
 };

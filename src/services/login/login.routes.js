@@ -7,7 +7,6 @@ const upload = require('../../config/multer');
 
 const seeder = require('../../config/defaultConfig');
 
-
 router.post('/signup/user', regUser);
 router.post('/login/user', logUser);
 

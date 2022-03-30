@@ -30,6 +30,11 @@ userSchema.methods.generateToken = async function () {
       email: doc.email,
       title: doc.title,
       role: doc.role,
+      
+      //will be defined for assistant ONLY
+      agency: doc.agency,
+      manager: doc.manager,
+      agency_thumbnail: doc.agency_thumbnail
     },
     TOKENKEY
   );

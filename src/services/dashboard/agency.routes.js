@@ -1,5 +1,6 @@
 //import dependencies
 const router = require('express').Router();
+const {multer} = require('../../config/multer');
 
 //middlewares
 const { authN } = require('../../middlewares/authN');
@@ -11,8 +12,8 @@ const { readAssistants, readAssistant, addAssistant, editAssistant, deleteAssist
 //Managers Routes -- Assistants  --> /dashboard/agency
 router.get('/assistants', authN, isManager, readAssistants);
 router.get('/assistant/:id', authN, isManager, readAssistant);
-router.post('/assistant', authN, isManager, addAssistant);
-router.put('/assistant/:id', authN, isManager, editAssistant);
+router.post('/assistant', authN, isManager, multer.single('image'), addAssistant);
+router.put('/assistant/:id', authN, isManager, multer.single('image'), editAssistant);
 router.delete('/assistant/:id', authN, isManager, deleteAssistant);
 
 module.exports = router;
